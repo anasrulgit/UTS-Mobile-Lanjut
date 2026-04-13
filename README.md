@@ -10,7 +10,7 @@ Pre-requisites
 --------------
 * Experience with Kotlin syntax.
 * How to create and run a project in Android Studio.
-* How to create composable functions 
+* How to create composable functions
 
 
 Getting Started
