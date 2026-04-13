@@ -120,6 +120,8 @@ fun GameScreen(gameViewModel: GameViewModel = viewModel()) {
 
         GameStatus(score = gameUiState.score, modifier = Modifier.padding(20.dp))
 
+        Historybenar(history = gameUiState.correctWords)
+
         if (gameUiState.isGameOver) {
             FinalScoreDialog(
                 score = gameUiState.score,
@@ -248,6 +250,51 @@ private fun FinalScoreDialog(
             }
         }
     )
+}
+
+@Composable
+private fun Historybenar(
+    history: List<String>,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        colors = CardDefaults.cardColors(containerColor = colorScheme.secondaryContainer)
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "History Kata Benar",
+                style = typography.titleMedium,
+                modifier = Modifier.padding(bottom = 8.dp),
+                color = colorScheme.onSecondaryContainer
+            )
+            if (history.isEmpty()) {
+                Text(
+                    text = "Belum ada kata yang benar",
+                    style = typography.bodyMedium,
+                    color = colorScheme.onSecondaryContainer
+                )
+            } else {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    history.forEach { word ->
+                        Text(
+                            text = "✓ $word",
+                            style = typography.bodyLarge,
+                            color = colorScheme.onSecondaryContainer
+                        )
+                    }
+                }
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true)

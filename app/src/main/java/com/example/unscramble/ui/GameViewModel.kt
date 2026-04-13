@@ -72,7 +72,9 @@ class GameViewModel : ViewModel() {
             // User's guess is correct, increase the score
             // and call updateGameState() to prepare the game for next round
             val updatedScore = _uiState.value.score.plus(SCORE_INCREASE)
-            updateGameState(updatedScore)
+            val updatedHistory = _uiState.value.correctWords.toMutableList()
+            updatedHistory.add(currentWord)
+            updateGameState(updatedScore, updatedHistory)
         } else {
             // User's guess is wrong, show an error
             _uiState.update { currentState ->
@@ -87,7 +89,7 @@ class GameViewModel : ViewModel() {
      * Skip to next word
      */
     fun skipWord() {
-        updateGameState(_uiState.value.score)
+        updateGameState(_uiState.value.score, _uiState.value.correctWords)
         // Reset user guess
         updateUserGuess("")
     }
@@ -96,14 +98,15 @@ class GameViewModel : ViewModel() {
      * Picks a new currentWord and currentScrambledWord and updates UiState according to
      * current game state.
      */
-    private fun updateGameState(updatedScore: Int) {
+    private fun updateGameState(updatedScore: Int, updatedHistory: List<String>) {
         if (usedWords.size == MAX_NO_OF_WORDS){
             //Last round in the game, update isGameOver to true, don't pick a new word
             _uiState.update { currentState ->
                 currentState.copy(
                     isGuessedWordWrong = false,
                     score = updatedScore,
-                    isGameOver = true
+                    isGameOver = true,
+                    correctWords = updatedHistory
                 )
             }
         } else{
@@ -113,7 +116,8 @@ class GameViewModel : ViewModel() {
                     isGuessedWordWrong = false,
                     currentScrambledWord = pickRandomWordAndShuffle(),
                     currentWordCount = currentState.currentWordCount.inc(),
-                    score = updatedScore
+                    score = updatedScore,
+                    correctWords = updatedHistory
                 )
             }
         }
